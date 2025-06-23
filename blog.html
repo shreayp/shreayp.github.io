@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shreay | blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <canvas id="gliderCanvas" aria-hidden="true"></canvas>
+    <div class="page-shell">
+        <header class="minimal-nav">
+            <div class="brand">
+                <a href="index.html" class="brand-text">~/shreay</a>
+            </div>
+            <div class="nav-actions">
+                <a class="ghost-link" href="index.html">home</a>
+                <a class="ghost-link" href="https://github.com/shreayp" target="_blank"
+                    rel="noopener noreferrer">github</a>
+            </div>
+        </header>
+
+        <main class="hero">
+            <div class="hero-copy">
+                <p class="lede" style="text-align: center; max-width: 100%;">
+                    nothing here yet. but follow me, i'm trying to be famous:
+                    <a href="https://instagram.com/shreay_" target="_blank" rel="noopener noreferrer"
+                        class="instagram-link">
+                        <i class="fa-brands fa-instagram"></i> shreay_
+                    </a>
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        (() => {
+            const canvas = document.getElementById("gliderCanvas");
+            const ctx = canvas.getContext("2d");
+            const gliders = [];
+            const gliderShape = [
+                [0, 1],
+                [1, 2],
+                [2, 0],
+                [2, 1],
+                [2, 2],
+            ];
+
+            const cursor = {
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2,
+                targetX: window.innerWidth / 2,
+                targetY: window.innerHeight / 2,
+            };
+
+            function resize() {
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = window.innerWidth * dpr;
+                canvas.height = window.innerHeight * dpr;
+                canvas.style.width = "100%";
+                canvas.style.height = "100%";
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+
+            function spawnGliders(count = 32) {
+                gliders.length = 0;
+                for (let i = 0; i < count; i += 1) {
+                    gliders.push({
+                        x: Math.random() * window.innerWidth,
+                        y: Math.random() * window.innerHeight,
+                        size: 8 + Math.random() * 10,
+                        rotation: Math.random() * Math.PI * 2,
+                        vx: -0.3 + Math.random() * 0.6,
+                        vy: -0.3 + Math.random() * 0.6,
+                        alpha: 0.12 + Math.random() * 0.12,
+                        parallax: 0.15 + Math.random() * 0.25,
+                    });
+                }
+            }
+
+            function drawGlider(g) {
+                const influenceX = (cursor.x - window.innerWidth / 2) * g.parallax * 0.12;
+                const influenceY = (cursor.y - window.innerHeight / 2) * g.parallax * 0.12;
+
+                ctx.save();
+                ctx.translate(g.x + influenceX, g.y + influenceY);
+                ctx.rotate(g.rotation);
+                ctx.globalAlpha = g.alpha;
+                ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+                const cell = g.size;
+
+                gliderShape.forEach(([cx, cy]) => {
+                    ctx.fillRect((cx - 1.5) * cell, (cy - 1.5) * cell, cell, cell);
+                });
+
+                ctx.restore();
+            }
+
+            function step() {
+                cursor.x += (cursor.targetX - cursor.x) * 0.08;
+                cursor.y += (cursor.targetY - cursor.y) * 0.08;
+
+                ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+                gliders.forEach(g => {
+                    g.x += g.vx;
+                    g.y += g.vy;
+                    g.rotation += 0.0008;
+
+                    if (g.x > window.innerWidth + 40) g.x = -40;
+                    if (g.x < -40) g.x = window.innerWidth + 40;
+                    if (g.y > window.innerHeight + 40) g.y = -40;
+                    if (g.y < -40) g.y = window.innerHeight + 40;
+
+                    drawGlider(g);
+                });
+
+                requestAnimationFrame(step);
+            }
+
+            window.addEventListener("pointermove", e => {
+                cursor.targetX = e.clientX;
+                cursor.targetY = e.clientY;
+            });
+
+            window.addEventListener("resize", () => {
+                resize();
+                spawnGliders(gliders.length || 32);
+            });
+
+            resize();
+            spawnGliders(42);
+            step();
+        })();
+    </script>
+</body>
+
+</html>
