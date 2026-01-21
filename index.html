@@ -17,7 +17,7 @@
         <header class="minimal-nav">
             <div class="brand">
                 <span class="brand-mark"></span>
-                <a href="index.html" class="brand-text">~/shreay</a>
+                <a href="index.html" class="brand-text" id="home-link">~/shreay</a>
             </div>
             <div class="nav-actions">
                 <a class="ghost-link" href="blog.html">blog</a>
@@ -168,6 +168,35 @@
             resize();
             spawnGliders(42);
             step();
+        })();
+
+        // Easter Egg
+        (() => {
+            const homeLink = document.getElementById("home-link");
+            const navActions = document.querySelector(".nav-actions");
+            let clickCount = 0;
+            const messages = ["ouch!", "hey!", "stop that!"];
+
+            homeLink.addEventListener("click", (e) => {
+                if (clickCount < 3) {
+                    e.preventDefault();
+                    homeLink.textContent = messages[clickCount];
+                    clickCount++;
+                } else if (clickCount === 3) {
+                    e.preventDefault();
+                    homeLink.textContent = "~/shreay";
+
+                    if (!document.getElementById("nitya-link")) {
+                        const newLink = document.createElement("a");
+                        newLink.href = "easteregg.html";
+                        newLink.textContent = "nitya";
+                        newLink.className = "ghost-link highlight-link";
+                        newLink.id = "nitya-link";
+                        navActions.appendChild(newLink);
+                    }
+                    clickCount++;
+                }
+            });
         })();
     </script>
 </body>

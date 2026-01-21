@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shreay | ???</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <canvas id="gliderCanvas" aria-hidden="true"></canvas>
+    <div class="page-shell">
+        <header class="minimal-nav">
+            <div class="brand">
+                <a href="index.html" class="brand-text">~/shreay</a>
+            </div>
+        </header>
+
+        <main class="valentine-container">
+            <div class="typed-content">
+                <span id="typed-text"></span><span class="caret" id="caret">|</span>
+            </div>
+
+            <div class="button-group" id="btn-group">
+                <button class="val-btn yes" id="btn-yes">Yes</button>
+                <button class="val-btn no" id="btn-no">No</button>
+            </div>
+        </main>
+    </div>
+
+    <div id="wordle-overlay" class="wordle-overlay">
+        <div class="wordle-title">Guess the Password</div>
+        <div id="wordle-grid" class="wordle-grid"></div>
+        <div id="wordle-keyboard" class="wordle-keyboard"></div>
+    </div>
+
+    <script>
+        const textEl = document.getElementById("typed-text");
+        const caret = document.getElementById("caret");
+        const btnGroup = document.getElementById("btn-group");
+        const btnYes = document.getElementById("btn-yes");
+        const btnNo = document.getElementById("btn-no");
+
+        const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        async function type(text, speed = 100) {
+            caret.classList.remove("dim");
+            for (let char of text) {
+                textEl.textContent += char;
+
+                let delay = speed + Math.random() * 50;
+
+                if (",.?".includes(char)) {
+                    delay += 300;
+                }
+
+                await wait(delay);
+            }
+        }
+
+        async function backspace(count, speed = 50) {
+            caret.classList.remove("dim");
+            for (let i = 0; i < count; i++) {
+                let current = textEl.textContent;
+                if (current.length > 0) {
+                    textEl.textContent = current.slice(0, -1);
+                    await wait(speed);
+                }
+            }
+        }
+
+        async function clearAll(speed = 30) {
+            await backspace(textEl.textContent.length, speed);
+        }
+
+        function getTimeDifference() {
+            const start = new Date("2025-02-28T00:00:00");
+            const now = new Date();
+            const diff = now - start;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+            return { days, hours, minutes };
+        }
+
+        async function runSequence() {
+            await wait(1000);
+
+            await type("hi unc");
+            await wait(800);
+
+            await backspace(3);
+            await wait(300);
+
+            await type("rat");
+            await wait(800);
+
+            await backspace(3);
+            await wait(300);
+
+            await type("frog :)");
+            await wait(1500);
+
+            await clearAll();
+            await wait(500);
+
+            const { days, hours, minutes } = getTimeDifference();
+            await type(`it's been ${days} days,`);
+            await wait(400);
+            await type(` ${hours} hours,`);
+            await wait(400);
+            await type(` ${minutes} minutes,`);
+            await wait(600);
+            await type(` since my days got that much brighter 😗`);
+            await wait(1500);
+            await clearAll();
+            await wait(500);
+            await type("somehow you still put up with me :)");
+            await wait(2500);
+
+            await clearAll();
+            await wait(500);
+
+            await type("looking forward to many more adventures filled with:");
+            await wait(800);
+
+            const emojis = [" 🍵", " ⛸️", " 🍜", " 🏂", " 🍺", " 🏎️", " ☕", " 🎨", " 🌮", " 🛫"];
+            for (let emoji of emojis) {
+                await type(emoji, 150);
+                await wait(700);
+            }
+            await wait(2500);
+
+            await clearAll();
+            await wait(800);
+
+            await type("aw man, who's chopping onions in here 😭");
+            await wait(2000);
+
+            await clearAll();
+            await wait(800);
+
+            await type("ok no more stalling,");
+            await wait(600);
+            await type(" you know why you're here");
+            await wait(2000);
+
+            await clearAll();
+            await wait(1500);
+
+            await type("Nitya,", 150);
+            await wait(800);
+
+            await type(" can you make me a sandwich?");
+            await wait(1000);
+            await backspace(28);
+            await wait(400);
+            await type(" teehee :)");
+            await wait(800);
+            await backspace(10);
+            await wait(400);
+
+            await type(" will you be my valentine?", 120);
+            caret.classList.add("dim");
+
+            await wait(1000);
+            btnGroup.classList.add("visible");
+        }
+
+        btnYes.addEventListener("click", async () => {
+            btnGroup.style.display = "none";
+            textEl.textContent = "";
+
+            await type("yay!!! <3");
+            await wait(3000);
+
+            await clearAll();
+            await wait(500);
+            await type("here's todays wordle if ya forgot!!");
+
+            const link = document.createElement("a");
+            link.href = "https://www.nytimes.com/games/wordle/index.html";
+            link.textContent = "Click to Lose Hehe :))";
+            link.target = "_blank";
+            link.className = "val-btn";
+            link.style.display = "inline-block";
+            link.style.marginTop = "2rem";
+            link.style.opacity = "0";
+            link.style.transition = "opacity 1s ease";
+
+            document.querySelector(".valentine-container").appendChild(link);
+
+            const ps = document.createElement("p");
+            ps.textContent = "oh btw there's no real backend to this thing so you'll have to tell me in person 🙂";
+            ps.style.color = "var(--muted)";
+            ps.style.fontSize = "0.9rem";
+            ps.style.marginTop = "1rem";
+            ps.style.opacity = "0";
+            ps.style.transition = "opacity 1s ease 0.5s";
+
+            document.querySelector(".valentine-container").appendChild(ps);
+
+            requestAnimationFrame(() => {
+                link.style.opacity = "1";
+                ps.style.opacity = "1";
+            });
+        });
+
+        const moveNoButton = (e) => {
+            if (e.type === 'touchstart') {
+                e.preventDefault();
+            }
+
+            const phrases = ["are you sure?", "really?", "please?", "click yes!", "too slow!", "no >:("];
+            const random = phrases[Math.floor(Math.random() * phrases.length)];
+            btnNo.textContent = random;
+
+            btnNo.style.position = "fixed";
+            btnNo.style.transform = "none";
+            btnNo.style.zIndex = "1000";
+
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            const btnRect = btnNo.getBoundingClientRect();
+            const btnWidth = btnRect.width;
+            const btnHeight = btnRect.height;
+
+            const padding = 20;
+
+            const textRect = textEl.getBoundingClientRect();
+            const yesRect = btnYes.getBoundingClientRect();
+
+            let newLeft, newTop;
+            let safetyTries = 0;
+            const maxTries = 50;
+
+            while (safetyTries < maxTries) {
+                // Generate random position within padded viewport
+                newLeft = padding + Math.random() * (viewportWidth - btnWidth - 2 * padding);
+                newTop = padding + Math.random() * (viewportHeight - btnHeight - 2 * padding);
+
+                // Check collision with text rect w/ buffer
+                const buffer = 30;
+
+                const overlapsText = !(
+                    newLeft + btnWidth < textRect.left - buffer ||
+                    newLeft > textRect.right + buffer ||
+                    newTop + btnHeight < textRect.top - buffer ||
+                    newTop > textRect.bottom + buffer
+                );
+
+                // Check collision with Yes Button
+                const yesBuffer = 20;
+                const overlapsYes = !(
+                    newLeft + btnWidth < yesRect.left - yesBuffer ||
+                    newLeft > yesRect.right + yesBuffer ||
+                    newTop + btnHeight < yesRect.top - yesBuffer ||
+                    newTop > yesRect.bottom + yesBuffer
+                );
+
+                // Check collision with Header Link (~/shreay)
+                const brandLink = document.querySelector('.brand-text');
+                const brandRect = brandLink ? brandLink.getBoundingClientRect() : { top: 0, bottom: 0, left: 0, right: 0 };
+                const brandBuffer = 10;
+                const overlapsBrand = brandLink ? !(
+                    newLeft + btnWidth < brandRect.left - brandBuffer ||
+                    newLeft > brandRect.right + brandBuffer ||
+                    newTop + btnHeight < brandRect.top - brandBuffer ||
+                    newTop > brandRect.bottom + brandBuffer
+                ) : false;
+
+                if (!overlapsText && !overlapsYes && !overlapsBrand) {
+                    break;
+                }
+                safetyTries++;
+            }
+
+            btnNo.style.left = `${newLeft}px`;
+            btnNo.style.top = `${newTop}px`;
+        };
+
+        btnNo.addEventListener("mouseover", moveNoButton);
+        btnNo.addEventListener("touchstart", moveNoButton);
+
+        const SECRET = "SWIFT";
+        let currentGuess = "";
+        let currentRow = 0;
+        const maxRows = 6;
+        const overlay = document.getElementById('wordle-overlay');
+        const grid = document.getElementById('wordle-grid');
+        const keyboard = document.getElementById('wordle-keyboard');
+
+        // Init Grid
+        for (let i = 0; i < maxRows * 5; i++) {
+            const tile = document.createElement('div');
+            tile.className = 'wordle-tile';
+            tile.id = `tile-${i}`;
+            grid.appendChild(tile);
+        }
+
+        // Init Keyboard
+        const keys = [
+            "QWERTYUIOP",
+            "ASDFGHJKL",
+            "ZXCVBNM"
+        ];
+
+        keys.forEach((rowChars, rowIndex) => {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'keyboard-row';
+
+            for (let char of rowChars) {
+                const key = document.createElement('div');
+                key.textContent = char;
+                key.className = 'key';
+                key.onclick = () => handleInput(char);
+                rowDiv.appendChild(key);
+            }
+
+            if (rowIndex === 2) {
+                const enter = document.createElement('div');
+                enter.textContent = 'ENTER';
+                enter.className = 'key wide';
+                enter.onclick = submitGuess;
+                rowDiv.insertBefore(enter, rowDiv.firstChild);
+
+                const backspace = document.createElement('div');
+                backspace.textContent = '⌫';
+                backspace.className = 'key wide';
+                backspace.onclick = deleteChar;
+                rowDiv.appendChild(backspace);
+            }
+
+            keyboard.appendChild(rowDiv);
+        });
+
+        function updateGrid() {
+            const start = currentRow * 5;
+            for (let i = 0; i < 5; i++) {
+                const tile = document.getElementById(`tile-${start + i}`);
+                tile.textContent = currentGuess[i] || "";
+                tile.setAttribute('data-status', currentGuess.length > i ? 'active' : '');
+            }
+        }
+
+        function handleInput(char) {
+            if (currentGuess.length < 5) {
+                currentGuess += char;
+                updateGrid();
+            }
+        }
+
+        function deleteChar() {
+            currentGuess = currentGuess.slice(0, -1);
+            updateGrid();
+        }
+
+        async function submitGuess() {
+            if (currentGuess.length !== 5) return;
+
+            const guess = currentGuess;
+            const rowStart = currentRow * 5;
+
+            for (let i = 0; i < 5; i++) {
+                const tile = document.getElementById(`tile-${rowStart + i}`);
+                const letter = guess[i];
+                let status = 'absent';
+
+                if (SECRET[i] === letter) {
+                    status = 'correct';
+                } else if (SECRET.includes(letter)) {
+                    status = 'present';
+                }
+
+                tile.setAttribute('data-status', status);
+                await wait(200);
+            }
+
+            if (guess === SECRET) {
+                await wait(500);
+                overlay.classList.add('hidden');
+                runSequence();
+            } else {
+                currentRow++;
+                currentGuess = "";
+                if (currentRow >= maxRows) {
+                    grid.classList.add('shake');
+                    await wait(500);
+                    grid.classList.remove('shake');
+                    currentRow = 0;
+                    currentGuess = "";
+                    document.querySelectorAll('.wordle-tile').forEach(t => {
+                        t.textContent = "";
+                        t.removeAttribute('data-status');
+                    });
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (overlay.classList.contains('hidden')) return;
+
+            const key = e.key.toUpperCase();
+            if (key === 'ENTER') submitGuess();
+            else if (key === 'BACKSPACE') deleteChar();
+            else if (/^[A-Z]$/.test(key)) handleInput(key);
+        });
+    </script>
+</body>
+
+</html>

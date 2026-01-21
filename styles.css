@@ -236,3 +236,240 @@ a {
         }
     }
 }
+
+/* Easter Egg Styles */
+#nitya-link {
+    color: #ff9eb5;
+    animation: fadeIn 0.6s ease forwards;
+}
+
+#nitya-link:hover {
+    color: #ff5e86;
+    text-shadow: 0 0 10px rgba(255, 94, 134, 0.3);
+}
+
+/* Easter Egg Page Styles */
+.valentine-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+}
+
+.typed-content {
+    font-size: clamp(1rem, 5vw, 2.5rem);
+    font-weight: 600;
+    min-height: 3rem;
+    margin-bottom: 2rem;
+    max-width: 800px;
+    line-height: 1.4;
+}
+
+.button-group {
+    display: flex;
+    gap: 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+    margin-top: 2rem;
+}
+
+.button-group.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.val-btn {
+    background: transparent;
+    border: 1px solid var(--text);
+    color: var(--text);
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+@media (hover: hover) {
+    .val-btn:hover {
+        background: var(--text);
+        color: var(--bg);
+        box-shadow: 0 0 15px rgba(212, 212, 212, 0.3);
+    }
+
+    .val-btn.yes:hover {
+        background: #4ade80;
+        border-color: #4ade80;
+        box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+    }
+}
+
+/* Wordle Overlay */
+.wordle-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    transition: opacity 0.5s ease;
+}
+
+.wordle-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wordle-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.wordle-grid {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-bottom: 2rem;
+}
+
+.wordle-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+
+.wordle-tile {
+    width: clamp(40px, 12vw, 60px);
+    height: clamp(40px, 12vw, 60px);
+    border: 2px solid #3a3a3c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1.2rem, 5vw, 2rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text);
+    transition: all 0.2s ease;
+}
+
+.wordle-tile[data-status="active"] {
+    border-color: #565758;
+}
+
+.wordle-tile[data-status="correct"] {
+    background: #538d4e;
+    border-color: #538d4e;
+}
+
+.wordle-tile[data-status="present"] {
+    background: #b59f3b;
+    border-color: #b59f3b;
+}
+
+.wordle-tile[data-status="absent"] {
+    background: #3a3a3c;
+    border-color: #3a3a3c;
+}
+
+.wordle-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.key {
+    background: #818384;
+    color: var(--text);
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 58px;
+    flex: 1;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    user-select: none;
+    transition: background 0.1s ease;
+}
+
+.key:active {
+    background: #565758;
+}
+
+.key.wide {
+    flex: 1.5;
+    font-size: 0.8rem;
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    10% {
+        transform: translateX(-5px);
+    }
+
+    20% {
+        transform: translateX(5px);
+    }
+
+    30% {
+        transform: translateX(-5px);
+    }
+
+    40% {
+        transform: translateX(5px);
+    }
+
+    50% {
+        transform: translateX(-5px);
+    }
+
+    60% {
+        transform: translateX(5px);
+    }
+
+    70% {
+        transform: translateX(-5px);
+    }
+
+    80% {
+        transform: translateX(5px);
+    }
+
+    90% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
