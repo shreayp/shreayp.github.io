@@ -473,3 +473,15 @@ a {
         transform: translateX(0);
     }
 }
+
+.key[data-status="correct"] {
+    background: #538d4e;
+}
+
+.key[data-status="present"] {
+    background: #b59f3b;
+}
+
+.key[data-status="absent"] {
+    background: #3a3a3c;
+}

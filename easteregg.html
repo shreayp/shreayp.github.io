@@ -320,6 +320,7 @@
                 const key = document.createElement('div');
                 key.textContent = char;
                 key.className = 'key';
+                key.setAttribute('data-key', char);
                 key.onclick = () => handleInput(char);
                 rowDiv.appendChild(key);
             }
@@ -368,6 +369,7 @@
             const guess = currentGuess;
             const rowStart = currentRow * 5;
 
+            // 1. Reveal tiles with animation
             for (let i = 0; i < 5; i++) {
                 const tile = document.getElementById(`tile-${rowStart + i}`);
                 const letter = guess[i];
@@ -381,6 +383,30 @@
 
                 tile.setAttribute('data-status', status);
                 await wait(200);
+            }
+
+            // 2. Update keyboard colors all at once
+            for (let i = 0; i < 5; i++) {
+                const letter = guess[i];
+                let status = 'absent';
+
+                if (SECRET[i] === letter) {
+                    status = 'correct';
+                } else if (SECRET.includes(letter)) {
+                    status = 'present';
+                }
+
+                const key = document.querySelector(`.key[data-key="${letter}"]`);
+                if (key) {
+                    const currentStatus = key.getAttribute('data-status');
+                    if (status === 'correct') {
+                        key.setAttribute('data-status', 'correct');
+                    } else if (status === 'present' && currentStatus !== 'correct') {
+                        key.setAttribute('data-status', 'present');
+                    } else if (status === 'absent' && !currentStatus) {
+                        key.setAttribute('data-status', 'absent');
+                    }
+                }
             }
 
             if (guess === SECRET) {
