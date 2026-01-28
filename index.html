@@ -179,11 +179,20 @@
             const messages = ["ouch!", "hey!", "stop that!"];
 
             homeLink.addEventListener("click", (e) => {
-                if (clickCount < 3) {
+                if (clickCount < 6) {
                     e.preventDefault();
-                    homeLink.textContent = messages[clickCount];
+
+                    if (clickCount >= 3) {
+                        homeLink.textContent = messages[clickCount - 3];
+                    }
+
+                    homeLink.classList.remove('shake');
+                    void homeLink.offsetWidth;
+                    homeLink.classList.add('shake');
+
+                    setTimeout(() => homeLink.classList.remove('shake'), 500);
                     clickCount++;
-                } else if (clickCount === 3) {
+                } else if (clickCount === 6) {
                     e.preventDefault();
                     homeLink.textContent = "~/shreay";
 

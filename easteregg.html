@@ -212,7 +212,12 @@
             });
         });
 
+        let isMoving = false;
         const moveNoButton = (e) => {
+            if (isMoving) return;
+            isMoving = true;
+            setTimeout(() => { isMoving = false; }, 200);
+
             if (e.type === 'touchstart') {
                 e.preventDefault();
             }
